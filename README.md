@@ -1,10 +1,14 @@
+<p align="center">
+  <img src="iron_pasture_banner.png" alt="Iron Pasture — Milk Safety Compliance Portal" width="700"/>
+</p>
+
 # Iron Pasture
 
 **U.S. Department of Agriculture — Milk Safety Compliance Portal**
 
 > Sovereign AI — No data leaves this environment
 
-Powered by Tanzu Platform + Tanzu Data Intelligence
+Powered by VCF & Tanzu Platform + Tanzu Data Intelligence
 
 ---
 
