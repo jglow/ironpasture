@@ -1,0 +1,31 @@
+spring:
+  # Datasource from VCAP_SERVICES (java-cfenv injected by buildpack at runtime)
+  datasource:
+    url: ${vcap.services.iron-pasture-db.credentials.jdbcUrl:jdbc:postgresql://localhost:5432/ironpasture}
+    username: ${vcap.services.iron-pasture-db.credentials.user:ironpasture}
+    password: ${vcap.services.iron-pasture-db.credentials.password:ironpasture}
+
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration
+
+  ai:
+    openai:
+      base-url: ${vcap.services.iron-pasture-llm.credentials.url:http://localhost:0}
+      api-key: ${vcap.services.iron-pasture-llm.credentials.api-key:none}
+      chat:
+        options:
+          model: ${vcap.services.iron-pasture-llm.credentials.model:gpt-4o}
+          temperature: 0.1
+      embedding:
+        base-url: ${vcap.services.iron-pasture-embeddings.credentials.url:http://localhost:0}
+        api-key: ${vcap.services.iron-pasture-embeddings.credentials.api-key:none}
+        options:
+          model: ${vcap.services.iron-pasture-embeddings.credentials.model:nomic-embed-text}
+
+# Greenplum datasource — disabled placeholder for future analytics workloads
+# greenplum:
+#   datasource:
+#     url: ${vcap.services.iron-pasture-gp.credentials.jdbcUrl:}
+#     username: ${vcap.services.iron-pasture-gp.credentials.user:}
+#     password: ${vcap.services.iron-pasture-gp.credentials.password:}

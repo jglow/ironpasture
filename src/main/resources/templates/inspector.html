@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Inspector Review — Iron Pasture</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 class="ip-page-title">Inspector Review Panel</h1>
+    <p class="usa-intro">
+        Review AI-generated compliance reports. Approve, return for correction, or escalate
+        batches that require additional investigation.
+    </p>
+
+    <!-- ========== PLANT SELECTOR ========== -->
+    <div class="grid-row grid-gap margin-bottom-4">
+        <div class="grid-col-4">
+            <label class="usa-label" for="inspector-plant-select">Select Plant</label>
+            <select class="usa-select" id="inspector-plant-select">
+                <option value="">-- All Plants --</option>
+                <option value="PMO-WI-4401">PMO-WI-4401 — Dairyland Creamery</option>
+                <option value="PMO-CA-1102">PMO-CA-1102 — Central Valley Dairy</option>
+                <option value="PMO-NY-3350">PMO-NY-3350 — Hudson Farms Processing</option>
+                <option value="PMO-TX-2210">PMO-TX-2210 — Lone Star Milk Co.</option>
+            </select>
+        </div>
+        <div class="grid-col-4 flex-align-self-end">
+            <button class="usa-button usa-button--outline" type="button"
+                    id="btn-load-history" onclick="loadHistory()">
+                Load Compliance History
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== HISTORY TABLE ========== -->
+    <div class="usa-table-container--scrollable" tabindex="0">
+        <table class="usa-table usa-table--striped ip-history-table" id="history-table">
+            <caption class="usa-sr-only">Batch compliance history</caption>
+            <thead>
+            <tr>
+                <th scope="col" data-sortable>Batch ID</th>
+                <th scope="col" data-sortable>Plant ID</th>
+                <th scope="col" data-sortable>Date</th>
+                <th scope="col" data-sortable>Disposition</th>
+                <th scope="col" data-sortable>Pasteurization (&deg;F)</th>
+                <th scope="col" data-sortable>SCC</th>
+                <th scope="col" data-sortable>SPC</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody id="history-table-body">
+            <!-- Example rows — replaced by JS on load -->
+            <tr class="ip-row-clickable" data-batch-id="B-20260414-0630-WI4401"
+                onclick="loadReport('B-20260414-0630-WI4401')">
+                <td>B-20260414-0630-WI4401</td>
+                <td>PMO-WI-4401</td>
+                <td>2026-04-14 06:30</td>
+                <td><span class="ip-disposition ip-disposition--compliant">COMPLIANT</span></td>
+                <td>161.8</td>
+                <td>180,000</td>
+                <td>12,000</td>
+                <td><button class="usa-button usa-button--unstyled" type="button">View</button></td>
+            </tr>
+            <tr class="ip-row-clickable" data-batch-id="B-20260413-1415-WI4401"
+                onclick="loadReport('B-20260413-1415-WI4401')">
+                <td>B-20260413-1415-WI4401</td>
+                <td>PMO-WI-4401</td>
+                <td>2026-04-13 14:15</td>
+                <td><span class="ip-disposition ip-disposition--review">REQUIRES_REVIEW</span></td>
+                <td>160.1</td>
+                <td>220,000</td>
+                <td>18,500</td>
+                <td><button class="usa-button usa-button--unstyled" type="button">View</button></td>
+            </tr>
+            <tr class="ip-row-clickable" data-batch-id="B-20260412-0800-CA1102"
+                onclick="loadReport('B-20260412-0800-CA1102')">
+                <td>B-20260412-0800-CA1102</td>
+                <td>PMO-CA-1102</td>
+                <td>2026-04-12 08:00</td>
+                <td><span class="ip-disposition ip-disposition--noncompliant">NON_COMPLIANT</span></td>
+                <td>155.2</td>
+                <td>850,000</td>
+                <td>42,000</td>
+                <td><button class="usa-button usa-button--unstyled" type="button">View</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ========== REPORT DETAIL DRAWER ========== -->
+    <div id="report-drawer" class="ip-report-drawer" style="display:none;"
+         aria-label="Report detail panel">
+
+        <div class="ip-drawer-header">
+            <h2 id="drawer-batch-title">Report Detail</h2>
+            <button class="usa-button usa-button--unstyled ip-drawer-close"
+                    type="button" onclick="closeDrawer()" aria-label="Close detail panel">
+                &times;
+            </button>
+        </div>
+
+        <div class="ip-drawer-body">
+
+            <!-- Disposition -->
+            <div id="drawer-disposition-alert" class="usa-alert margin-bottom-3" role="alert">
+                <div class="usa-alert__body">
+                    <h3 class="usa-alert__heading" id="drawer-disposition-heading"></h3>
+                    <p class="usa-alert__text" id="drawer-disposition-text"></p>
+                </div>
+            </div>
+
+            <!-- Report Table -->
+            <h3>NCIMS 2359 Report</h3>
+            <div class="usa-table-container--scrollable" tabindex="0">
+                <table class="usa-table usa-table--borderless usa-table--striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Observed</th>
+                        <th scope="col">PMO Limit</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="drawer-report-body">
+                    <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Narrative -->
+            <h3>AI-Generated Narrative</h3>
+            <div class="ip-narrative-panel" id="drawer-narrative">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- PMO Passages -->
+            <h3>PMO Passages Referenced</h3>
+            <div id="drawer-citations" class="ip-citation-chips">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Inspector Actions -->
+            <div class="ip-inspector-actions margin-top-4">
+                <h3>Inspector Action</h3>
+                <div class="grid-row grid-gap">
+                    <div class="grid-col-auto">
+                        <button class="usa-button ip-btn-approve" type="button"
+                                onclick="approveReport()">
+                            Approve Report
+                        </button>
+                    </div>
+                    <div class="grid-col-auto">
+                        <button class="usa-button usa-button--secondary" type="button"
+                                onclick="returnReport()">
+                            Return for Correction
+                        </button>
+                    </div>
+                    <div class="grid-col-auto">
+                        <button class="usa-button usa-button--accent-warm" type="button"
+                                onclick="escalateReport()">
+                            Escalate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

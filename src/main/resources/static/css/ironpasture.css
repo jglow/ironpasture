@@ -1,0 +1,490 @@
+/* ==========================================================================
+   Iron Pasture — USDA Milk Safety Compliance Portal
+   Custom styles & USWDS overrides
+   ========================================================================== */
+
+:root {
+    --usda-green: #004831;
+    --usda-green-light: #e7f4e4;
+    --primary-blue: #005ea2;
+    --danger-red: #d83731;
+    --warning-gold: #e5a000;
+    --success-green: #2e8540;
+    --gray-warm-2: #f5f5f0;
+    --gray-warm-10: #e6e6e2;
+    --gray-warm-50: #76766a;
+    --gray-warm-90: #1b1b1b;
+    --sovereign-green: #2e8540;
+    --sovereign-bg: #e7f4e4;
+}
+
+/* ---------- Typography ---------- */
+
+body {
+    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--gray-warm-90);
+    background-color: var(--gray-warm-2);
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+    color: var(--usda-green);
+}
+
+.ip-page-title {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+    font-size: 2rem;
+    border-bottom: 3px solid var(--usda-green);
+    padding-bottom: 0.5rem;
+}
+
+/* ---------- Agency Header ---------- */
+
+.ip-header {
+    background-color: var(--usda-green);
+    color: #ffffff;
+    padding: 1rem 0;
+}
+
+.ip-header__seal {
+    width: 56px;
+    height: 56px;
+    margin-right: 1rem;
+    filter: brightness(0) invert(1);
+}
+
+.ip-header__agency {
+    margin: 0;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.ip-header__title {
+    margin: 0;
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* ---------- Sovereign AI Badge ---------- */
+
+.ip-sovereign-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: var(--sovereign-bg);
+    color: var(--sovereign-green);
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.375rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--sovereign-green);
+    white-space: nowrap;
+}
+
+.ip-sovereign-badge__icon {
+    flex-shrink: 0;
+}
+
+/* ---------- Main Layout ---------- */
+
+.ip-main-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    min-height: calc(100vh - 280px);
+}
+
+.ip-sidenav {
+    padding-top: 0.5rem;
+}
+
+.ip-sidenav .usa-sidenav {
+    border-right: 2px solid var(--gray-warm-10);
+    padding-right: 1rem;
+}
+
+.ip-sidenav .usa-sidenav__item a {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 500;
+    color: var(--usda-green);
+}
+
+.ip-sidenav .usa-sidenav__item a:hover,
+.ip-sidenav .usa-sidenav__item a.usa-current {
+    background-color: var(--usda-green-light);
+    color: var(--usda-green);
+    border-left-color: var(--usda-green);
+}
+
+.ip-content {
+    padding-left: 2rem;
+}
+
+/* ---------- Process List ---------- */
+
+.ip-process-section {
+    margin-bottom: 2.5rem;
+}
+
+.ip-process-list .usa-process-list__heading {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+}
+
+.ip-stage {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ip-stage--active {
+    background-color: var(--usda-green-light);
+    box-shadow: inset 4px 0 0 var(--usda-green);
+    border-radius: 4px;
+    padding-left: 1rem;
+}
+
+.ip-stage--active .usa-process-list__heading {
+    color: var(--usda-green);
+}
+
+.ip-stage--complete {
+    opacity: 0.6;
+}
+
+.ip-stage--complete .usa-process-list__heading::after {
+    content: " \2713";
+    color: var(--success-green);
+    font-weight: 700;
+}
+
+/* ---------- Sensor Form ---------- */
+
+.ip-form-section {
+    margin-bottom: 2.5rem;
+}
+
+.ip-sensor-form .usa-label {
+    font-weight: 600;
+    color: var(--gray-warm-90);
+}
+
+.ip-sensor-form .usa-input:focus,
+.ip-sensor-form .usa-select:focus {
+    border-color: var(--usda-green);
+    box-shadow: 0 0 0 2px var(--usda-green);
+}
+
+.ip-btn-submit {
+    background-color: var(--usda-green);
+    font-size: 1.1rem;
+    padding: 0.875rem 2rem;
+}
+
+.ip-btn-submit:hover {
+    background-color: #003622;
+}
+
+.ip-btn-submit:disabled {
+    background-color: var(--gray-warm-50);
+    cursor: not-allowed;
+}
+
+/* ---------- Disposition Chips ---------- */
+
+.ip-disposition {
+    display: inline-block;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.625rem;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.ip-disposition--compliant {
+    background-color: #ecf3ec;
+    color: var(--success-green);
+    border: 1px solid var(--success-green);
+}
+
+.ip-disposition--noncompliant {
+    background-color: #f8e8e7;
+    color: var(--danger-red);
+    border: 1px solid var(--danger-red);
+}
+
+.ip-disposition--review {
+    background-color: #fef0c8;
+    color: #936300;
+    border: 1px solid var(--warning-gold);
+}
+
+/* ---------- Results Panel ---------- */
+
+.ip-results-panel {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-warm-10);
+}
+
+.ip-report-table th {
+    background-color: var(--usda-green);
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+}
+
+.ip-report-section,
+.ip-narrative-section,
+.ip-citations-section {
+    margin-bottom: 2rem;
+}
+
+/* ---------- Narrative Panel ---------- */
+
+.ip-narrative-panel {
+    background-color: #ffffff;
+    border: 1px solid var(--gray-warm-10);
+    border-left: 4px solid var(--usda-green);
+    padding: 1.25rem 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    border-radius: 0 4px 4px 0;
+}
+
+/* ---------- Citation Chips ---------- */
+
+.ip-citation-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ip-citation-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: var(--usda-green-light);
+    color: var(--usda-green);
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.375rem 0.75rem;
+    border-radius: 16px;
+    border: 1px solid #b7d4b0;
+    cursor: default;
+}
+
+.ip-citation-chip::before {
+    content: "\00a7";
+    font-weight: 700;
+    opacity: 0.7;
+}
+
+/* ---------- Inspector Review ---------- */
+
+.ip-history-table th {
+    background-color: var(--usda-green);
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+}
+
+.ip-row-clickable {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.ip-row-clickable:hover {
+    background-color: var(--usda-green-light);
+}
+
+/* Report Drawer */
+
+.ip-report-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 55%;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+    animation: slideInRight 0.25s ease-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.ip-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background-color: var(--usda-green);
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.ip-drawer-header h2 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.ip-drawer-close {
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+}
+
+.ip-drawer-close:hover {
+    opacity: 0.8;
+}
+
+.ip-drawer-body {
+    padding: 1.5rem;
+}
+
+.ip-inspector-actions {
+    border-top: 2px solid var(--gray-warm-10);
+    padding-top: 1.5rem;
+}
+
+.ip-btn-approve {
+    background-color: var(--success-green);
+}
+
+.ip-btn-approve:hover {
+    background-color: #236b33;
+}
+
+/* ---------- Audit Log ---------- */
+
+.ip-audit-table th {
+    background-color: var(--usda-green);
+    color: #ffffff;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+}
+
+.ip-record-count {
+    font-size: 0.875rem;
+    color: var(--gray-warm-50);
+    margin-top: 0.5rem;
+}
+
+/* ---------- Footer ---------- */
+
+.ip-footer {
+    background-color: var(--usda-green);
+    color: #ffffff;
+    padding: 1.25rem 0;
+    margin-top: auto;
+}
+
+.ip-footer__seal {
+    width: 40px;
+    height: 40px;
+    margin-right: 1rem;
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.ip-footer__text {
+    margin: 0;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.ip-footer__sub {
+    margin: 0.125rem 0 0;
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* ---------- Loading Spinner ---------- */
+
+.ip-spinner {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: ip-spin 0.7s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes ip-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- Status Cells ---------- */
+
+.ip-status-pass {
+    color: var(--success-green);
+    font-weight: 700;
+}
+
+.ip-status-fail {
+    color: var(--danger-red);
+    font-weight: 700;
+}
+
+.ip-status-warn {
+    color: #936300;
+    font-weight: 700;
+}
+
+/* ---------- Utilities ---------- */
+
+.ip-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---------- Print Styles ---------- */
+
+@media print {
+    .ip-header,
+    .ip-footer,
+    .ip-sidenav,
+    .usa-banner,
+    .ip-btn-submit,
+    .ip-inspector-actions {
+        display: none;
+    }
+
+    .ip-content {
+        width: 100%;
+        padding: 0;
+    }
+
+    .ip-narrative-panel {
+        border-left-width: 2px;
+    }
+}

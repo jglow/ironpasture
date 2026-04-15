@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Dashboard — Iron Pasture</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 class="ip-page-title">Compliance Dashboard</h1>
+    <p class="usa-intro">
+        Submit sensor data for automated PMO compliance analysis. Each submission flows
+        through the Bronze&ndash;Silver&ndash;Gold data pipeline before final inspector review.
+    </p>
+
+    <!-- ========== PROCESS LIST ========== -->
+    <section class="ip-process-section" aria-label="Compliance pipeline stages">
+        <h2>Data Pipeline Stages</h2>
+        <ol class="usa-process-list ip-process-list" id="process-list">
+            <li class="usa-process-list__item ip-stage" data-stage="bronze" id="stage-bronze">
+                <h3 class="usa-process-list__heading">Bronze Ingest</h3>
+                <p class="margin-top-05">
+                    Raw sensor readings are ingested and validated for completeness.
+                    Schema enforcement and timestamp normalization applied.
+                </p>
+            </li>
+            <li class="usa-process-list__item ip-stage" data-stage="silver" id="stage-silver">
+                <h3 class="usa-process-list__heading">Silver Enrichment</h3>
+                <p class="margin-top-05">
+                    Readings are enriched with PMO reference ranges, plant metadata,
+                    and historical baselines. Outlier detection flags anomalies.
+                </p>
+            </li>
+            <li class="usa-process-list__item ip-stage" data-stage="gold" id="stage-gold">
+                <h3 class="usa-process-list__heading">Gold Draft</h3>
+                <p class="margin-top-05">
+                    Sovereign AI generates NCIMS 2359 compliance narrative and disposition
+                    recommendation. PMO passages are cited inline.
+                </p>
+            </li>
+            <li class="usa-process-list__item ip-stage" data-stage="review" id="stage-review">
+                <h3 class="usa-process-list__heading">Inspector Review</h3>
+                <p class="margin-top-05">
+                    Certified inspector reviews AI-generated report, approves or returns
+                    with annotations. Final disposition is recorded in the audit log.
+                </p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- ========== SENSOR DATA FORM ========== -->
+    <section class="ip-form-section" aria-label="Sensor data submission">
+        <h2>Sensor Data Submission</h2>
+
+        <form id="compliance-form" class="usa-form usa-form--large ip-sensor-form">
+
+            <div class="grid-row grid-gap">
+                <div class="grid-col-6">
+                    <label class="usa-label" for="plantId">Plant ID</label>
+                    <input class="usa-input" id="plantId" name="plantId" type="text"
+                           value="PMO-WI-4401" required/>
+                </div>
+                <div class="grid-col-6">
+                    <label class="usa-label" for="readingTimestamp">Reading Timestamp</label>
+                    <input class="usa-input" id="readingTimestamp" name="readingTimestamp"
+                           type="datetime-local" value="2026-04-14T06:30" required/>
+                </div>
+            </div>
+
+            <div class="grid-row grid-gap">
+                <div class="grid-col-4">
+                    <label class="usa-label" for="pasteurizationTemp">
+                        Pasteurization Temp (&deg;F)
+                    </label>
+                    <input class="usa-input" id="pasteurizationTemp" name="pasteurizationTemp"
+                           type="number" step="0.1" value="161.8" required/>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="htstHoldTime">
+                        HTST Hold Time (sec)
+                    </label>
+                    <input class="usa-input" id="htstHoldTime" name="htstHoldTime"
+                           type="number" step="0.1" value="15.2" required/>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="coolerTemp">
+                        Cooler Temp (&deg;F)
+                    </label>
+                    <input class="usa-input" id="coolerTemp" name="coolerTemp"
+                           type="number" step="0.1" value="38.4" required/>
+                </div>
+            </div>
+
+            <div class="grid-row grid-gap">
+                <div class="grid-col-4">
+                    <label class="usa-label" for="rawMilkScc">Raw Milk SCC</label>
+                    <input class="usa-input" id="rawMilkScc" name="rawMilkScc"
+                           type="number" value="180000" required/>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="processedMilkSpc">Processed Milk SPC</label>
+                    <input class="usa-input" id="processedMilkSpc" name="processedMilkSpc"
+                           type="number" value="12000" required/>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="coliformCount">Coliform Count</label>
+                    <input class="usa-input" id="coliformCount" name="coliformCount"
+                           type="number" value="4" required/>
+                </div>
+            </div>
+
+            <div class="grid-row grid-gap">
+                <div class="grid-col-4">
+                    <label class="usa-label" for="ph">pH</label>
+                    <input class="usa-input" id="ph" name="ph"
+                           type="number" step="0.01" value="6.72" required/>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="phosphataseTest">Phosphatase Test</label>
+                    <select class="usa-select" id="phosphataseTest" name="phosphataseTest" required>
+                        <option value="NEGATIVE" selected>NEGATIVE</option>
+                        <option value="POSITIVE">POSITIVE</option>
+                    </select>
+                </div>
+                <div class="grid-col-4">
+                    <label class="usa-label" for="operatorId">Operator ID</label>
+                    <input class="usa-input" id="operatorId" name="operatorId"
+                           type="text" value="OP-2281" required/>
+                </div>
+            </div>
+
+            <div class="grid-row grid-gap">
+                <div class="grid-col-6">
+                    <label class="usa-label" for="batchId">Batch ID</label>
+                    <input class="usa-input" id="batchId" name="batchId"
+                           type="text" value="B-20260414-0630-WI4401" required/>
+                </div>
+            </div>
+
+            <button type="submit" class="usa-button ip-btn-submit margin-top-3"
+                    id="btn-submit">
+                Run Compliance Check
+            </button>
+        </form>
+    </section>
+
+    <!-- ========== RESULTS PANEL ========== -->
+    <section id="results-panel" class="ip-results-panel" style="display:none;"
+             aria-label="Compliance check results">
+
+        <h2>Compliance Results</h2>
+
+        <!-- Disposition Alert -->
+        <div id="disposition-alert" class="usa-alert margin-bottom-3" role="alert">
+            <div class="usa-alert__body">
+                <h3 class="usa-alert__heading" id="disposition-heading"></h3>
+                <p class="usa-alert__text" id="disposition-text"></p>
+            </div>
+        </div>
+
+        <!-- NCIMS 2359 Draft Report -->
+        <div class="ip-report-section">
+            <h3>NCIMS 2359 Draft Report</h3>
+            <div class="usa-table-container--scrollable" tabindex="0">
+                <table class="usa-table usa-table--borderless usa-table--striped ip-report-table"
+                       id="report-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Observed Value</th>
+                        <th scope="col">PMO Limit</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="report-table-body">
+                    <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LLM Narrative -->
+        <div class="ip-narrative-section">
+            <h3>AI-Generated Compliance Narrative</h3>
+            <div class="ip-narrative-panel" id="narrative-panel">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- PMO Passages Referenced -->
+        <div class="ip-citations-section">
+            <h3>PMO Passages Referenced</h3>
+            <div id="pmo-citations" class="ip-citation-chips">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+    </section>
+
+</div>
+</body>
+</html>

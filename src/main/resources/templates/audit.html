@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Audit Log — Iron Pasture</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 class="ip-page-title">Compliance Audit Log</h1>
+    <p class="usa-intro">
+        Immutable record of all compliance checks performed. Each entry includes the model
+        version, prompt version, and full disposition chain for regulatory traceability.
+    </p>
+
+    <!-- ========== IMMUTABILITY NOTICE ========== -->
+    <div class="usa-alert usa-alert--success margin-bottom-4" role="alert">
+        <div class="usa-alert__body">
+            <h3 class="usa-alert__heading">Tamper-Evident Audit Trail</h3>
+            <p class="usa-alert__text">
+                All compliance checks are logged. Gold layer records are immutable.
+                Each record is cryptographically linked to ensure chain-of-custody integrity.
+            </p>
+        </div>
+    </div>
+
+    <!-- ========== FILTERS ========== -->
+    <div class="grid-row grid-gap margin-bottom-3">
+        <div class="grid-col-3">
+            <label class="usa-label" for="audit-plant-filter">Plant ID</label>
+            <select class="usa-select" id="audit-plant-filter">
+                <option value="">All Plants</option>
+                <option value="PMO-WI-4401">PMO-WI-4401</option>
+                <option value="PMO-CA-1102">PMO-CA-1102</option>
+                <option value="PMO-NY-3350">PMO-NY-3350</option>
+                <option value="PMO-TX-2210">PMO-TX-2210</option>
+            </select>
+        </div>
+        <div class="grid-col-3">
+            <label class="usa-label" for="audit-disposition-filter">Disposition</label>
+            <select class="usa-select" id="audit-disposition-filter">
+                <option value="">All</option>
+                <option value="COMPLIANT">COMPLIANT</option>
+                <option value="NON_COMPLIANT">NON_COMPLIANT</option>
+                <option value="REQUIRES_REVIEW">REQUIRES_REVIEW</option>
+            </select>
+        </div>
+        <div class="grid-col-3">
+            <label class="usa-label" for="audit-date-from">From</label>
+            <input class="usa-input" id="audit-date-from" type="date" value="2026-04-01"/>
+        </div>
+        <div class="grid-col-3">
+            <label class="usa-label" for="audit-date-to">To</label>
+            <input class="usa-input" id="audit-date-to" type="date" value="2026-04-14"/>
+        </div>
+    </div>
+
+    <div class="grid-row grid-gap margin-bottom-3">
+        <div class="grid-col-auto">
+            <button class="usa-button" type="button" id="btn-filter-audit"
+                    onclick="filterAuditLog()">
+                Apply Filters
+            </button>
+        </div>
+        <div class="grid-col-auto">
+            <button class="usa-button usa-button--outline" type="button"
+                    id="btn-export-csv" onclick="exportAuditCsv()">
+                Export to CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== AUDIT TABLE ========== -->
+    <div class="usa-table-container--scrollable" tabindex="0">
+        <table class="usa-table usa-table--striped ip-audit-table" id="audit-table">
+            <caption class="usa-sr-only">Compliance audit log entries</caption>
+            <thead>
+            <tr>
+                <th scope="col" data-sortable>Timestamp</th>
+                <th scope="col" data-sortable>Plant ID</th>
+                <th scope="col" data-sortable>Batch ID</th>
+                <th scope="col" data-sortable>Disposition</th>
+                <th scope="col">Model Used</th>
+                <th scope="col">Prompt Version</th>
+            </tr>
+            </thead>
+            <tbody id="audit-table-body">
+            <!-- Example rows — replaced by JS when API is connected -->
+            <tr>
+                <td>2026-04-14 06:32:14</td>
+                <td>PMO-WI-4401</td>
+                <td>B-20260414-0630-WI4401</td>
+                <td><span class="ip-disposition ip-disposition--compliant">COMPLIANT</span></td>
+                <td>gemma3:4b-it-qat</td>
+                <td>pmo-ncims-v1.2</td>
+            </tr>
+            <tr>
+                <td>2026-04-13 14:18:02</td>
+                <td>PMO-WI-4401</td>
+                <td>B-20260413-1415-WI4401</td>
+                <td><span class="ip-disposition ip-disposition--review">REQUIRES_REVIEW</span></td>
+                <td>gemma3:4b-it-qat</td>
+                <td>pmo-ncims-v1.2</td>
+            </tr>
+            <tr>
+                <td>2026-04-12 08:05:33</td>
+                <td>PMO-CA-1102</td>
+                <td>B-20260412-0800-CA1102</td>
+                <td><span class="ip-disposition ip-disposition--noncompliant">NON_COMPLIANT</span></td>
+                <td>gemma3:4b-it-qat</td>
+                <td>pmo-ncims-v1.2</td>
+            </tr>
+            <tr>
+                <td>2026-04-11 11:45:19</td>
+                <td>PMO-NY-3350</td>
+                <td>B-20260411-1130-NY3350</td>
+                <td><span class="ip-disposition ip-disposition--compliant">COMPLIANT</span></td>
+                <td>gemma3:4b-it-qat</td>
+                <td>pmo-ncims-v1.1</td>
+            </tr>
+            <tr>
+                <td>2026-04-10 07:12:48</td>
+                <td>PMO-TX-2210</td>
+                <td>B-20260410-0700-TX2210</td>
+                <td><span class="ip-disposition ip-disposition--compliant">COMPLIANT</span></td>
+                <td>gemma3:4b-it-qat</td>
+                <td>pmo-ncims-v1.1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Record count -->
+    <p class="ip-record-count" id="audit-record-count">
+        Showing <strong>5</strong> of <strong>5</strong> records
+    </p>
+
+</div>
+</body>
+</html>

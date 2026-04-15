@@ -1,0 +1,29 @@
+# Iron Pasture - Tanzu Platform deployment manifest
+#
+# Services:
+#   iron-pasture-db    — PostgreSQL with pgvector extension (single instance handles
+#                        both relational data and vector store)
+#   iron-pasture-llm   — GenAI tile chat model
+#                        Provision via: cf create-service genai <plan> iron-pasture-llm
+#   iron-pasture-embeddings — GenAI tile embedding model (nomic-embed-text)
+#                        Provision via: cf create-service genai <plan> iron-pasture-embeddings
+#
+# IMPORTANT: Outbound network traffic to public LLM APIs (OpenAI, Anthropic, etc.)
+# should be blocked. All LLM traffic routes through the on-platform GenAI tile only.
+---
+applications:
+  - name: iron-pasture
+    memory: 2G
+    instances: 1
+    path: target/iron-pasture.jar
+    buildpacks:
+      - java_buildpack_offline
+    env:
+      SPRING_PROFILES_ACTIVE: tanzu
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
+    services:
+      - iron-pasture-db
+      - iron-pasture-llm
+      - iron-pasture-embeddings
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health

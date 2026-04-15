@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Iron Pasture — USDA Milk Safety Compliance Portal</title>
+
+    <!-- USWDS 3.x -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/css/uswds.min.css"
+          integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"/>
+
+    <!-- Iron Pasture overrides -->
+    <link rel="stylesheet" th:href="@{/css/ironpasture.css}"/>
+</head>
+<body>
+
+<!-- ========== OFFICIAL GOV BANNER ========== -->
+<section class="usa-banner" aria-label="Official government website">
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true" class="usa-banner__header-flag"
+                         src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/img/us_flag_small.png"
+                         alt="U.S. flag"/>
+                </div>
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <p class="usa-banner__header-action">Here's how you know</p>
+                </div>
+                <button type="button" class="usa-accordion__button usa-banner__button"
+                        aria-expanded="false"
+                        aria-controls="gov-banner-default-default">
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                </button>
+            </div>
+        </header>
+        <div class="usa-banner__content usa-accordion__content" id="gov-banner-default-default">
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/img/icon-dot-gov.svg"
+                         role="img" alt="Dot gov icon"/>
+                    <div class="usa-media-block__body">
+                        <p><strong>Official websites use .gov</strong><br/>
+                            A <strong>.gov</strong> website belongs to an official government
+                            organization in the United States.</p>
+                    </div>
+                </div>
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/img/icon-https.svg"
+                         role="img" alt="HTTPS icon"/>
+                    <div class="usa-media-block__body">
+                        <p><strong>Secure .gov websites use HTTPS</strong><br/>
+                            A <strong>lock</strong> or <strong>https://</strong> means you've safely
+                            connected to the .gov website.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== AGENCY HEADER ========== -->
+<header class="ip-header" role="banner">
+    <div class="grid-container">
+        <div class="grid-row grid-gap flex-align-center">
+            <div class="grid-col-auto">
+                <img src="https://www.usda.gov/themes/flavor_custom/images/usda-symbol.svg"
+                     alt="USDA seal" class="ip-header__seal"/>
+            </div>
+            <div class="grid-col-fill">
+                <p class="ip-header__agency">U.S. Department of Agriculture</p>
+                <p class="ip-header__title">Iron Pasture &mdash; Milk Safety Compliance Portal</p>
+            </div>
+            <div class="grid-col-auto">
+                <span class="ip-sovereign-badge">
+                    <svg class="ip-sovereign-badge__icon" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    </svg>
+                    Sovereign AI &mdash; No data leaves this environment
+                </span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="grid-container ip-main-container">
+    <div class="grid-row grid-gap">
+
+        <!-- Side Navigation -->
+        <nav class="grid-col-2 ip-sidenav" aria-label="Side navigation">
+            <ul class="usa-sidenav">
+                <li class="usa-sidenav__item">
+                    <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'usa-current' : ''">
+                        Dashboard
+                    </a>
+                </li>
+                <li class="usa-sidenav__item">
+                    <a th:href="@{/inspector}" th:classappend="${#httpServletRequest.requestURI == '/inspector'} ? 'usa-current' : ''">
+                        Inspector Review
+                    </a>
+                </li>
+                <li class="usa-sidenav__item">
+                    <a th:href="@{/audit}" th:classappend="${#httpServletRequest.requestURI == '/audit'} ? 'usa-current' : ''">
+                        Audit Log
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="grid-col-10 ip-content">
+            <div layout:fragment="content"></div>
+        </main>
+
+    </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="ip-footer" role="contentinfo">
+    <div class="grid-container">
+        <div class="grid-row grid-gap flex-align-center">
+            <div class="grid-col-auto">
+                <img src="https://www.usda.gov/themes/flavor_custom/images/usda-symbol.svg"
+                     alt="USDA seal" class="ip-footer__seal"/>
+            </div>
+            <div class="grid-col-fill">
+                <p class="ip-footer__text">
+                    Iron Pasture v1.0 | Powered by Tanzu Platform &amp; Tanzu Data Intelligence
+                </p>
+                <p class="ip-footer__sub">
+                    U.S. Department of Agriculture &bull; Food Safety and Inspection Service
+                </p>
+            </div>
+            <div class="grid-col-auto">
+                <p class="ip-footer__text">
+                    NCIMS Pasteurized Milk Ordinance Compliance
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- USWDS JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/js/uswds.min.js"
+        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Iron Pasture JS -->
+<script th:src="@{/js/ironpasture.js}"></script>
+</body>
+</html>
