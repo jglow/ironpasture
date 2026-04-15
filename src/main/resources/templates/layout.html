@@ -9,8 +9,7 @@
 
     <!-- USWDS 3.x -->
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/css/uswds.min.css"
-          integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer"/>
+          href="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/css/uswds.min.css"/>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -98,6 +97,32 @@
     </div>
 </header>
 
+<!-- ========== PERSONA SWITCHER ========== -->
+<div class="ip-persona-bar">
+    <div class="grid-container">
+        <div class="grid-row flex-align-center">
+            <div class="grid-col-auto">
+                <span class="ip-persona-bar__label">Demo Persona:</span>
+            </div>
+            <div class="grid-col-auto">
+                <button class="ip-persona-btn ip-persona-btn--active" id="btn-persona-manager"
+                        onclick="switchPersona('manager')">
+                    Plant Manager
+                </button>
+                <button class="ip-persona-btn" id="btn-persona-inspector"
+                        onclick="switchPersona('inspector')">
+                    NCIMS Inspector
+                </button>
+            </div>
+            <div class="grid-col-fill">
+                <span class="ip-persona-bar__current" id="persona-status">
+                    Viewing as: <strong>Plant Manager</strong> — WI-GRADE-A-0042
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ========== MAIN CONTENT ========== -->
 <div class="grid-container ip-main-container">
     <div class="grid-row grid-gap">
@@ -106,17 +131,17 @@
         <nav class="grid-col-2 ip-sidenav" aria-label="Side navigation">
             <ul class="usa-sidenav">
                 <li class="usa-sidenav__item">
-                    <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'usa-current' : ''">
+                    <a th:href="@{/}" th:classappend="${currentPage == 'dashboard'} ? 'usa-current' : ''">
                         Dashboard
                     </a>
                 </li>
                 <li class="usa-sidenav__item">
-                    <a th:href="@{/inspector}" th:classappend="${#httpServletRequest.requestURI == '/inspector'} ? 'usa-current' : ''">
+                    <a th:href="@{/inspector}" th:classappend="${currentPage == 'inspector'} ? 'usa-current' : ''">
                         Inspector Review
                     </a>
                 </li>
                 <li class="usa-sidenav__item">
-                    <a th:href="@{/audit}" th:classappend="${#httpServletRequest.requestURI == '/audit'} ? 'usa-current' : ''">
+                    <a th:href="@{/audit}" th:classappend="${currentPage == 'audit'} ? 'usa-current' : ''">
                         Audit Log
                     </a>
                 </li>
@@ -157,8 +182,7 @@
 </footer>
 
 <!-- USWDS JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/js/uswds.min.js"
-        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/js/uswds.min.js" defer></script>
 
 <!-- Iron Pasture JS -->
 <script th:src="@{/js/ironpasture.js}"></script>

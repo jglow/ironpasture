@@ -23,5 +23,6 @@ public record NcimsReport(
         Instant auditTimestamp,
         String modelUsed,
         String promptVersion,
-        String batchId
+        String batchId,
+        long silverEnrichmentId
 ) {}

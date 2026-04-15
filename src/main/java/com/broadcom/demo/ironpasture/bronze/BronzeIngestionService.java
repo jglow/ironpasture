@@ -11,12 +11,20 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +41,50 @@ public class BronzeIngestionService {
     public BronzeIngestionService(JdbcTemplate jdbcTemplate, VectorStore vectorStore) {
         this.jdbcTemplate = jdbcTemplate;
         this.vectorStore = vectorStore;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    @Profile("local")
+    public void loadSeedData() {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM bronze_sensor_readings", Integer.class);
+        if (count != null && count > 0) {
+            log.info("Bronze sensor readings already seeded ({} rows), skipping", count);
+            return;
+        }
+
+        var resource = new ClassPathResource("seed/sensor_readings.csv");
+        try (var reader = new BufferedReader(
+                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+
+            reader.readLine(); // skip header
+            String line;
+            int loaded = 0;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length < 12) continue;
+
+                var reading = new SensorReading(
+                        parts[0].trim(),
+                        LocalDateTime.parse(parts[1].trim()).toInstant(ZoneOffset.UTC),
+                        Double.parseDouble(parts[2].trim()),
+                        Double.parseDouble(parts[3].trim()),
+                        Integer.parseInt(parts[4].trim()),
+                        Integer.parseInt(parts[5].trim()),
+                        Integer.parseInt(parts[6].trim()),
+                        Double.parseDouble(parts[7].trim()),
+                        Double.parseDouble(parts[8].trim()),
+                        parts[9].trim(),
+                        parts[10].trim(),
+                        parts[11].trim()
+                );
+                ingestSensorReading(reading);
+                loaded++;
+            }
+            log.info("Loaded {} seed sensor readings into bronze layer", loaded);
+        } catch (Exception e) {
+            log.warn("Failed to load seed sensor data: {}", e.getMessage());
+        }
     }
 
     /**
@@ -57,7 +109,7 @@ public class BronzeIngestionService {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, reading.plantId());
             ps.setTimestamp(2, Timestamp.from(reading.readingTimestamp()));
             ps.setDouble(3, reading.pasteurizationTempF());

@@ -31,13 +31,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                        .requestMatchers("/", "/inspector").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/compliance/pre-fill").hasRole("PLANT_MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/api/compliance/report/**").hasAnyRole("PLANT_MANAGER", "INSPECTOR")
-                        .requestMatchers(HttpMethod.GET, "/api/compliance/history/**").hasRole("INSPECTOR")
-                        .requestMatchers(HttpMethod.POST, "/api/admin/**").hasRole("INSPECTOR")
+                        .requestMatchers("/", "/inspector", "/audit", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/info").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/compliance/report/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/compliance/history/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/compliance/pre-fill").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/**").hasRole("INSPECTOR")
+                        .anyRequest().permitAll()
                 );
 
         return http.build();

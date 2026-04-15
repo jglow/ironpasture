@@ -5,7 +5,50 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     initComplianceForm();
+    initPersonaSwitcher();
 });
+
+/* ---------- Persona Switcher ---------- */
+
+function initPersonaSwitcher() {
+    var saved = localStorage.getItem('ip-persona') || 'manager';
+    applyPersona(saved);
+}
+
+function switchPersona(persona) {
+    localStorage.setItem('ip-persona', persona);
+    applyPersona(persona);
+}
+
+function applyPersona(persona) {
+    var btnManager = document.getElementById('btn-persona-manager');
+    var btnInspector = document.getElementById('btn-persona-inspector');
+    var status = document.getElementById('persona-status');
+
+    if (!btnManager || !btnInspector) return;
+
+    btnManager.classList.remove('ip-persona-btn--active');
+    btnInspector.classList.remove('ip-persona-btn--active');
+
+    // Show/hide nav items and sections based on persona
+    var dashNav = document.querySelector('a[href="/"]');
+    var inspectorNav = document.querySelector('a[href="/inspector"]');
+    var auditNav = document.querySelector('a[href="/audit"]');
+
+    if (persona === 'manager') {
+        btnManager.classList.add('ip-persona-btn--active');
+        if (status) status.innerHTML = 'Viewing as: <strong>Plant Manager</strong> — WI-GRADE-A-0042';
+        if (dashNav) dashNav.closest('li').style.display = '';
+        if (inspectorNav) inspectorNav.closest('li').style.display = 'none';
+        if (auditNav) auditNav.closest('li').style.display = 'none';
+    } else {
+        btnInspector.classList.add('ip-persona-btn--active');
+        if (status) status.innerHTML = 'Viewing as: <strong>NCIMS Inspector</strong> — Regional Office';
+        if (dashNav) dashNav.closest('li').style.display = 'none';
+        if (inspectorNav) inspectorNav.closest('li').style.display = '';
+        if (auditNav) auditNav.closest('li').style.display = '';
+    }
+}
 
 /* ---------- Form Submission ---------- */
 
@@ -28,16 +71,19 @@ function submitComplianceCheck() {
     var stages = ['bronze', 'silver', 'gold', 'review'];
     animateStages(stages, 0);
 
+    var ts = val('readingTimestamp');
+    if (ts && !ts.endsWith('Z')) ts += ':00Z';
+
     var payload = {
         plantId: val('plantId'),
-        readingTimestamp: val('readingTimestamp'),
-        pasteurizationTemp: numVal('pasteurizationTemp'),
-        htstHoldTime: numVal('htstHoldTime'),
-        rawMilkScc: numVal('rawMilkScc'),
+        readingTimestamp: ts,
+        pasteurizationTempF: numVal('pasteurizationTemp'),
+        htstHoldTimeSeconds: numVal('htstHoldTime'),
+        rawMilkSomaticCellCount: numVal('rawMilkScc'),
         processedMilkSpc: numVal('processedMilkSpc'),
         coliformCount: numVal('coliformCount'),
-        ph: numVal('ph'),
-        coolerTemp: numVal('coolerTemp'),
+        pH: numVal('ph'),
+        coolerTempF: numVal('coolerTemp'),
         phosphataseTest: val('phosphataseTest'),
         operatorId: val('operatorId'),
         batchId: val('batchId')

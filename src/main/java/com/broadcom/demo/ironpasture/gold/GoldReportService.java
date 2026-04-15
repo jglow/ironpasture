@@ -167,7 +167,8 @@ public class GoldReportService {
                     Instant.now(),
                     modelUsed,
                     PROMPT_VERSION,
-                    batchId
+                    batchId,
+                    silverEnrichmentId
             );
 
             persistReport(report);
@@ -200,7 +201,8 @@ public class GoldReportService {
                 Instant.now(),
                 modelUsed,
                 PROMPT_VERSION,
-                batchId
+                batchId,
+                silverEnrichmentId
         );
 
         persistReport(fallback);
@@ -215,38 +217,38 @@ public class GoldReportService {
 
     private void persistReport(NcimsReport report) {
         try {
-            String thresholdJson = objectMapper.writeValueAsString(Map.of(
-                    "item16p_pasteurizationTemp", nullSafe(report.item16p_pasteurizationTemp()),
-                    "item16p_holdTime", nullSafe(report.item16p_holdTime()),
-                    "item7r_scc", nullSafe(report.item7r_scc()),
-                    "item7p_spc", nullSafe(report.item7p_spc()),
-                    "item7p_coliform", nullSafe(report.item7p_coliform()),
-                    "item16p_phosphatase", nullSafe(report.item16p_phosphatase()),
-                    "coolerTempCompliance", nullSafe(report.coolerTempCompliance())
-            ));
             String passagesJson = objectMapper.writeValueAsString(report.pmoPassagesReferenced());
 
             jdbcTemplate.update("""
                     INSERT INTO gold_ncims_reports (
-                        facility_name, plant_id, inspection_date, inspector_id,
-                        regulatory_authority, threshold_results, overall_disposition,
-                        llm_draft_narrative, pmo_passages_referenced,
-                        audit_timestamp, model_used, prompt_version, batch_id
-                    ) VALUES (?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?::jsonb, ?, ?, ?, ?)
+                        facility_name, plant_id, batch_id, inspection_date, inspector_id,
+                        regulatory_authority,
+                        item16p_pasteurization_temp, item16p_hold_time,
+                        item7r_scc, item7p_spc, item7p_coliform,
+                        item16p_phosphatase, cooler_temp_compliance,
+                        overall_disposition, llm_draft_narrative, pmo_passages_referenced,
+                        model_used, prompt_version, silver_enrichment_id
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?::jsonb, ?::jsonb, ?::jsonb, ?::jsonb, ?::jsonb, ?::jsonb, ?::jsonb, ?, ?, ?::jsonb, ?, ?, ?)
                     """,
                     report.facilityName(),
                     report.plantId(),
+                    report.batchId(),
                     report.inspectionDate(),
                     report.inspectorId(),
                     report.regulatoryAuthority(),
-                    thresholdJson,
+                    toJson(report.item16p_pasteurizationTemp()),
+                    toJson(report.item16p_holdTime()),
+                    toJson(report.item7r_scc()),
+                    toJson(report.item7p_spc()),
+                    toJson(report.item7p_coliform()),
+                    toJson(report.item16p_phosphatase()),
+                    toJson(report.coolerTempCompliance()),
                     report.overallDisposition().name(),
                     report.llmDraftNarrative(),
                     passagesJson,
-                    Timestamp.from(report.auditTimestamp()),
                     report.modelUsed(),
                     report.promptVersion(),
-                    report.batchId()
+                    report.silverEnrichmentId()
             );
         } catch (Exception e) {
             log.error("Failed to persist gold report for batchId={}", report.batchId(), e);
@@ -254,7 +256,12 @@ public class GoldReportService {
         }
     }
 
-    private Object nullSafe(Object obj) {
-        return obj != null ? obj : Map.of();
+    private String toJson(Object obj) {
+        try {
+            return objectMapper.writeValueAsString(obj != null ? obj : Map.of());
+        } catch (Exception e) {
+            return "{}";
+        }
     }
+
 }

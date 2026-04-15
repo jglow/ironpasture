@@ -113,14 +113,28 @@ public class SilverEnrichmentService {
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement("""
                         INSERT INTO silver_sensor_enriched (
-                            bronze_id, plant_id, batch_id, threshold_status, pmo_passages, enriched_at
-                        ) VALUES (?, ?, ?, ?::jsonb, ?::jsonb, NOW())
-                        """, Statement.RETURN_GENERATED_KEYS);
+                            bronze_reading_id, plant_id, batch_id, reading_timestamp,
+                            pasteurization_temp_f, htst_hold_time_seconds,
+                            raw_milk_somatic_cell_count, processed_milk_spc, coliform_count,
+                            ph, cooler_temp_f, phosphatase_test, operator_id,
+                            threshold_status, matched_pmo_passages
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb, ?)
+                        """, new String[]{"id"});
                 ps.setLong(1, bronzeId);
                 ps.setString(2, (String) bronze.get("plant_id"));
                 ps.setString(3, (String) bronze.get("batch_id"));
-                ps.setString(4, thresholdJson);
-                ps.setString(5, passagesJson);
+                ps.setTimestamp(4, (java.sql.Timestamp) bronze.get("reading_timestamp"));
+                ps.setObject(5, bronze.get("pasteurization_temp_f"));
+                ps.setObject(6, bronze.get("htst_hold_time_seconds"));
+                ps.setObject(7, bronze.get("raw_milk_somatic_cell_count"));
+                ps.setObject(8, bronze.get("processed_milk_spc"));
+                ps.setObject(9, bronze.get("coliform_count"));
+                ps.setObject(10, bronze.get("ph"));
+                ps.setObject(11, bronze.get("cooler_temp_f"));
+                ps.setString(12, (String) bronze.get("phosphatase_test"));
+                ps.setString(13, (String) bronze.get("operator_id"));
+                ps.setString(14, thresholdJson);
+                ps.setString(15, passagesJson);
                 return ps;
             }, keyHolder);
 

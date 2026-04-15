@@ -11,6 +11,8 @@ spring:
   ai:
     ollama:
       base-url: http://localhost:11434
+      init:
+        timeout: 300s
       chat:
         options:
           model: llama3.1:8b
@@ -18,3 +20,10 @@ spring:
       embedding:
         options:
           model: nomic-embed-text
+
+server:
+  servlet:
+    session:
+      timeout: 5m
+  tomcat:
+    connection-timeout: 300s
