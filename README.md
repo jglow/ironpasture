@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="iron_pasture_banner.png" alt="Iron Pasture — Milk Safety Compliance Portal" width="700"/>
+  <img src="iron_pasture.png" alt="Iron Pasture — Milk Safety Compliance Portal" width="700"/>
 </p>
 
 # Iron Pasture
