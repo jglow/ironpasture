@@ -50,23 +50,37 @@ Bronze Ingest  ──>  Silver Enrichment  ──>  Gold Draft  ──>  Inspect
 
 ## Application Screenshots
 
-### Plant Manager Dashboard
+### Fig. 1 — Plant Manager Dashboard
+
+<p align="center">
+  <img src="docs/screenshots/plant_manager_dashboard.jpeg" alt="Plant Manager Dashboard" width="700"/>
+</p>
 
 The Plant Manager submits batch sensor readings via the USWDS-compliant form. The Bronze-Silver-Gold pipeline stages are shown with live status indicators. All fields map directly to PMO Section 7 and 16p compliance parameters.
 
-### Inspector Review Panel (NCIMS Inspector view)
+### Fig. 2 — Inspector Review Panel (NCIMS Inspector view)
+
+<p align="center">
+  <img src="docs/screenshots/inspector_review_panel.jpeg" alt="Inspector Review Panel" width="700"/>
+</p>
 
 The NCIMS Inspector sees cross-plant compliance history with color-coded disposition badges (COMPLIANT, REQUIRES_REVIEW, NON_COMPLIANT). Role separation ensures Plant Managers cannot access this view.
 
-### NCIMS 2359 Report Detail
+### Fig. 3 — NCIMS 2359 Report Detail
+
+<p align="center">
+  <img src="docs/screenshots/ncims_2359_report.jpeg" alt="NCIMS 2359 Report Detail" width="700"/>
+</p>
 
 Clicking a batch opens the AI-generated NCIMS 2359 report with parameter-level pass/fail status, the LLM compliance narrative, and PMO passages referenced. The inspector can Approve, Return for Correction, or Escalate.
 
-### Compliance Audit Log
+### Fig. 4 — Compliance Audit Log
+
+<p align="center">
+  <img src="docs/screenshots/compliance_audit_log.jpeg" alt="Compliance Audit Log" width="700"/>
+</p>
 
 The immutable Gold layer audit log records every compliance check with timestamp, plant ID, disposition, and model version. Date-range and disposition filters support regulatory review. Export to CSV is available for external reporting.
-
-> See [iron_pasture_exec_summary.pdf](iron_pasture_exec_summary.pdf) for the full executive summary with screenshots.
 
 ---
 
