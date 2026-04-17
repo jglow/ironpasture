@@ -13,19 +13,6 @@ import InspectorReviewPanel from './pages/InspectorReviewPanel';
 export default function App() {
     return (
         <BrowserRouter>
-            {/* Government Banner */}
-            <section className="usa-banner" aria-label="Official government website">
-                <div className="usa-banner__header">
-                    <div className="usa-banner__inner">
-                        <div className="grid-col-fill tablet:grid-col-auto">
-                            <p className="usa-banner__header-text">
-                                An official website of the United States government
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Agency Header */}
             <header className="ip-header">
                 <div className="grid-container">
